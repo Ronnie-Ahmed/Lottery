@@ -1,8 +1,8 @@
-# Live : [@Live Project Link](https://dao-ronnie-ahmed.vercel.app/)
+<!-- # Live : [@Live Project Link](https://dao-ronnie-ahmed.vercel.app/)
 
-# DAO
+# Lottery Dapp
 
-🐧 🐧 DAO 🐧🐧
+🐧 🐧 Lottery 🐧🐧
 
 🗳️ Introducing my Decentralized Autonomous Organization (DAO) powered by OpenZeppelin Governance and ERC20 Tokens! 🌐
 
@@ -57,4 +57,4 @@ https://github.com/Ronnie-Ahmed/DAO/assets/68500792/673c182d-28d6-490d-be13-d632
 
 
 
-```
+``` -->
