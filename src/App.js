@@ -9,7 +9,7 @@ function App() {
     <div className="min-h-screen relative">
       {/* Pseudo-element for the blurred background */}
       <div
-        className="absolute inset-0 bg-center bg-cover filter blur-sm"
+        className="absolute inset-0 bg-center bg-cover filter blur-lg"
         style={{
           backgroundImage: `url(${backgroundpic})`,
         }}

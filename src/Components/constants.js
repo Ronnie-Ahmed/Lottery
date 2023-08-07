@@ -1,6 +1,6 @@
 import { createContext } from "react";
 export const UserContext = createContext(null);
-export const lotteryaddress = "0x47dF6CecAB93B0B4DEEB173537bdDe7857ED629A";
+export const lotteryaddress = "0x4fC0ae08721110bA5b33B48829a081b205B89A40";
 export const lotterywalletaddress =
   "0x6b4C988b9D993407D144F6dDcaa7D87c34F0d686";
 
@@ -11,6 +11,12 @@ export const lotteryabi = [
     inputs: [],
     outputs: [],
     stateMutability: "nonpayable",
+  },
+  {
+    type: "error",
+    name: "ExceededmaxamountofTicketPerson",
+    inputs: [],
+    outputs: [],
   },
   {
     type: "error",
@@ -29,32 +35,6 @@ export const lotteryabi = [
     name: "NotInRightState",
     inputs: [],
     outputs: [],
-  },
-  {
-    type: "event",
-    name: "Approval",
-    inputs: [
-      {
-        type: "address",
-        name: "owner",
-        indexed: true,
-        internalType: "address",
-      },
-      {
-        type: "address",
-        name: "spender",
-        indexed: true,
-        internalType: "address",
-      },
-      {
-        type: "uint256",
-        name: "value",
-        indexed: false,
-        internalType: "uint256",
-      },
-    ],
-    outputs: [],
-    anonymous: false,
   },
   {
     type: "event",
@@ -118,32 +98,6 @@ export const lotteryabi = [
   },
   {
     type: "event",
-    name: "Transfer",
-    inputs: [
-      {
-        type: "address",
-        name: "from",
-        indexed: true,
-        internalType: "address",
-      },
-      {
-        type: "address",
-        name: "to",
-        indexed: true,
-        internalType: "address",
-      },
-      {
-        type: "uint256",
-        name: "value",
-        indexed: false,
-        internalType: "uint256",
-      },
-    ],
-    outputs: [],
-    anonymous: false,
-  },
-  {
-    type: "event",
     name: "winnerevent",
     inputs: [
       {
@@ -170,19 +124,8 @@ export const lotteryabi = [
   },
   {
     type: "function",
-    name: "allowance",
-    inputs: [
-      {
-        type: "address",
-        name: "owner",
-        internalType: "address",
-      },
-      {
-        type: "address",
-        name: "spender",
-        internalType: "address",
-      },
-    ],
+    name: "amountofmyticket",
+    inputs: [],
     outputs: [
       {
         type: "uint256",
@@ -194,43 +137,58 @@ export const lotteryabi = [
   },
   {
     type: "function",
-    name: "approve",
+    name: "changeLotterytime",
     inputs: [
       {
-        type: "address",
-        name: "spender",
-        internalType: "address",
-      },
-      {
         type: "uint256",
-        name: "amount",
+        name: "_newblocktime",
         internalType: "uint256",
       },
     ],
-    outputs: [
-      {
-        type: "bool",
-        name: "",
-        internalType: "bool",
-      },
-    ],
+    outputs: [],
     stateMutability: "nonpayable",
   },
   {
     type: "function",
-    name: "balanceOf",
+    name: "changemaxamountofticket",
     inputs: [
       {
-        type: "address",
-        name: "account",
-        internalType: "address",
+        type: "uint256",
+        name: "_newamount",
+        internalType: "uint256",
+      },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "changeticketprice",
+    inputs: [
+      {
+        type: "uint256",
+        name: "newprice",
+        internalType: "uint256",
+      },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "checkticketholder",
+    inputs: [
+      {
+        type: "uint256",
+        name: "ticketId",
+        internalType: "uint256",
       },
     ],
     outputs: [
       {
-        type: "uint256",
+        type: "address",
         name: "",
-        internalType: "uint256",
+        internalType: "address",
       },
     ],
     stateMutability: "view",
@@ -244,7 +202,7 @@ export const lotteryabi = [
   },
   {
     type: "function",
-    name: "currenttime",
+    name: "getLotterytime",
     inputs: [],
     outputs: [
       {
@@ -254,43 +212,6 @@ export const lotteryabi = [
       },
     ],
     stateMutability: "view",
-  },
-  {
-    type: "function",
-    name: "decimals",
-    inputs: [],
-    outputs: [
-      {
-        type: "uint8",
-        name: "",
-        internalType: "uint8",
-      },
-    ],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    name: "decreaseAllowance",
-    inputs: [
-      {
-        type: "address",
-        name: "spender",
-        internalType: "address",
-      },
-      {
-        type: "uint256",
-        name: "subtractedValue",
-        internalType: "uint256",
-      },
-    ],
-    outputs: [
-      {
-        type: "bool",
-        name: "",
-        internalType: "bool",
-      },
-    ],
-    stateMutability: "nonpayable",
   },
   {
     type: "function",
@@ -307,20 +228,7 @@ export const lotteryabi = [
   },
   {
     type: "function",
-    name: "getTicket",
-    inputs: [
-      {
-        type: "uint256",
-        name: "amount",
-        internalType: "uint256",
-      },
-    ],
-    outputs: [],
-    stateMutability: "nonpayable",
-  },
-  {
-    type: "function",
-    name: "getTicketToken",
+    name: "getTickets",
     inputs: [
       {
         type: "uint256",
@@ -359,6 +267,19 @@ export const lotteryabi = [
   },
   {
     type: "function",
+    name: "getmaxamountofticket",
+    inputs: [],
+    outputs: [
+      {
+        type: "uint256",
+        name: "",
+        internalType: "uint256",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
     name: "getprizeamount",
     inputs: [],
     outputs: [
@@ -385,6 +306,19 @@ export const lotteryabi = [
   },
   {
     type: "function",
+    name: "getticketprice",
+    inputs: [],
+    outputs: [
+      {
+        type: "uint256",
+        name: "",
+        internalType: "uint256",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
     name: "getwinneraddress",
     inputs: [],
     outputs: [
@@ -398,37 +332,13 @@ export const lotteryabi = [
   },
   {
     type: "function",
-    name: "increaseAllowance",
-    inputs: [
-      {
-        type: "address",
-        name: "spender",
-        internalType: "address",
-      },
-      {
-        type: "uint256",
-        name: "addedValue",
-        internalType: "uint256",
-      },
-    ],
-    outputs: [
-      {
-        type: "bool",
-        name: "",
-        internalType: "bool",
-      },
-    ],
-    stateMutability: "nonpayable",
-  },
-  {
-    type: "function",
-    name: "name",
+    name: "myholdingtickets",
     inputs: [],
     outputs: [
       {
-        type: "string",
+        type: "uint256[]",
         name: "",
-        internalType: "string",
+        internalType: "uint256[]",
       },
     ],
     stateMutability: "view",
@@ -451,98 +361,6 @@ export const lotteryabi = [
     name: "renounceOwnership",
     inputs: [],
     outputs: [],
-    stateMutability: "nonpayable",
-  },
-  {
-    type: "function",
-    name: "symbol",
-    inputs: [],
-    outputs: [
-      {
-        type: "string",
-        name: "",
-        internalType: "string",
-      },
-    ],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    name: "ticketprice",
-    inputs: [],
-    outputs: [
-      {
-        type: "uint256",
-        name: "",
-        internalType: "uint256",
-      },
-    ],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    name: "totalSupply",
-    inputs: [],
-    outputs: [
-      {
-        type: "uint256",
-        name: "",
-        internalType: "uint256",
-      },
-    ],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    name: "transfer",
-    inputs: [
-      {
-        type: "address",
-        name: "to",
-        internalType: "address",
-      },
-      {
-        type: "uint256",
-        name: "amount",
-        internalType: "uint256",
-      },
-    ],
-    outputs: [
-      {
-        type: "bool",
-        name: "",
-        internalType: "bool",
-      },
-    ],
-    stateMutability: "nonpayable",
-  },
-  {
-    type: "function",
-    name: "transferFrom",
-    inputs: [
-      {
-        type: "address",
-        name: "from",
-        internalType: "address",
-      },
-      {
-        type: "address",
-        name: "to",
-        internalType: "address",
-      },
-      {
-        type: "uint256",
-        name: "amount",
-        internalType: "uint256",
-      },
-    ],
-    outputs: [
-      {
-        type: "bool",
-        name: "",
-        internalType: "bool",
-      },
-    ],
     stateMutability: "nonpayable",
   },
   {

@@ -3,7 +3,13 @@ import luffy1 from "../assets/Luffy1.jpg";
 import luffy3 from "../assets/Luffy3.jpg";
 import luffy4 from "../assets/Luffy4.jpg";
 import luffy5 from "../assets/Luffy5.jpg";
+import luffy7 from "../assets/Luffy7.jpg";
+import luffy8 from "../assets/Lufffy8.jpg";
+import luffy9 from "../assets/Luffy9.jpg";
 import { FormPopup } from "../Components/FormPopup";
+import { ChangeTicketPrice } from "../Components/ChangeTicketPrice";
+import { ChangeLotteryTimeLimit } from "../Components/ChangeLotteryTimeLimit";
+import { ChangeMax } from "../Components/ChangeMax";
 import { lotteryaddress, lotteryabi } from "../Components/constants";
 
 import { ethers } from "ethers";
@@ -14,6 +20,9 @@ import { useState, useEffect } from "react";
 export const Home = () => {
   const address = useAddress();
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [changeticketprice, setchangeticketprice] = useState(false);
+  const [changeLotterytimelimit, setchangeLotterytimelimit] = useState(false);
+  const [changemaxamount, setchangemaxamount] = useState(false);
   const [currenttime, setcurrenttime] = useState(0);
   const [lotterystartime, setlotterystarttime] = useState(0);
   const [lotteryendtime, setlotteryendtime] = useState(0);
@@ -23,6 +32,10 @@ export const Home = () => {
   const [prizeamount, setprizeamount] = useState(0);
   const [ticketprice, setticketprice] = useState(0);
   const [contractowner, setowner] = useState("");
+  const [ticketamount, getticketamount] = useState("");
+  const [holdingticket, getholdingticket] = useState([]);
+  const [lotterytime, getlotterytime] = useState(0);
+  const [maxamount, getmaxamount] = useState(0);
 
   const truncateCaddress = `${winneraddress.slice(
     0,
@@ -40,6 +53,15 @@ export const Home = () => {
       alert("Lottery is not active");
     }
     setIsFormOpen(false);
+  };
+  const handlechangeticketprice = (formData) => {
+    setchangeticketprice(false);
+  };
+  const handlechangelotterytimelimit = (formData) => {
+    setchangeLotterytimelimit(false);
+  };
+  const handlemaxamount = (formData) => {
+    setchangemaxamount(false);
   };
   const createlottery = async () => {
     if (address === contractaddress) {
@@ -63,13 +85,24 @@ export const Home = () => {
         }
       } catch (err) {
         console.log(err);
-        alert("Lottery Already Created or transaction failed or Rejected");
+        if (err.code === "ACTION_REJECTED") {
+          alert("Transaction Rejected");
+        } else if (err.reason === "execution reverted") {
+          alert("Execution Reverted");
+        } else if (
+          err.message ===
+          "MetaMask Tx Signature: User denied transaction signature."
+        ) {
+          alert("Transaction Rejected");
+        }
       }
     } else {
       alert("Only Contract Owner can Call this function");
     }
   };
   const handlelotterywin = async () => {
+    console.log(holdingticket);
+
     if (address === contractaddress) {
       try {
         if (window.ethereum) {
@@ -80,26 +113,29 @@ export const Home = () => {
             lotteryabi,
             signer
           );
-          if (currenttime > lotteryendtime) {
-            const amount = await contract.getprizeamount();
-            // console.log(amount.toString());
-            // console.log(ethers.utils.parseEther(amount.toString()));
-            // console.log(formatamount);
-            const data = await contract.winner({
-              value: amount.toString(),
-            });
-            await data.wait(1);
-            alert("Winner Declared");
-          } else {
-            alert("Lottery Still active Created");
-          }
 
-          // console.log(contract);
+          const amount = await contract.getprizeamount();
+
+          const data = await contract.winner({
+            value: amount.toString(),
+          });
+          await data.wait(1);
+          alert("Winner Declared");
         } else {
           throw new Error("Please Connect Wallet");
         }
       } catch (err) {
         console.log(err);
+        if (err.code === "ACTION_REJECTED") {
+          alert("Transaction Rejected");
+        } else if (err.reason === "execution reverted") {
+          alert("Execution Reverted");
+        } else if (
+          err.message ===
+          "MetaMask Tx Signature: User denied transaction signature."
+        ) {
+          alert("Transaction Rejected");
+        }
       }
     } else {
       alert("Only Contract Owner can Call this function");
@@ -124,8 +160,8 @@ export const Home = () => {
         const no = await contract.winnerticketNumber();
         setwinnerticket(no.toString());
         const pamount = await contract.getprizeamount();
-        setprizeamount(pamount.toString());
-        const ticketp = await contract.ticketprice();
+        setprizeamount(ethers.utils.formatEther(pamount.toString()));
+        const ticketp = await contract.getticketprice();
 
         setticketprice(ethers.utils.formatEther(ticketp.toString()));
 
@@ -135,8 +171,15 @@ export const Home = () => {
         const blockNumber = await provider.getBlockNumber();
         const block = await provider.getBlock(blockNumber);
         const timestamp = block.timestamp;
-
         setcurrenttime(timestamp);
+        const amount = await contract.amountofmyticket();
+        getticketamount(amount.toString());
+        const holding = await contract.myholdingtickets();
+        getholdingticket([holding.toString()]);
+        const time = await contract.getLotterytime();
+        getlotterytime(time.toString());
+        const max = await contract.getmaxamountofticket();
+        getmaxamount(max.toString());
       } else {
         throw new Error("Please Connect Wallet");
       }
@@ -145,7 +188,7 @@ export const Home = () => {
     }
   };
   useEffect(() => {
-    const fetchDataEveryThreeSeconds = () => {
+    const fetchDataEveryThreeSeconds = async () => {
       fetchdata();
     };
 
@@ -160,7 +203,7 @@ export const Home = () => {
   }, []);
 
   return (
-    <div className="flex flex-column justify-center items-center h-screen">
+    <div className="flex flex-column justify-center items-center ">
       {status === "undefined " ||
       status === "disconnected" ||
       status === "disconnected" ||
@@ -177,21 +220,20 @@ export const Home = () => {
           </div>
         </div>
       ) : (
-        <div className="flex flex-col md:flex-row">
+        <div className="flex flex-col mt-5 md:flex-row">
           <div className="md:w-2/3">
             <section
-              className="flex flex-col md:flex-row m-5 items-center mx-4 px-1 md:mx-16 rounded-lg  md:p-8 mb-8 shadow-2xl shadow-cyan-800 cursor-pointer"
+              className="flex flex-col  md:flex-row mt-20 m-5 items-center mx-4 px-1 md:mx-16 rounded-lg  md:p-8 mb-8 shadow-2xl shadow-cyan-800 cursor-pointer"
               onClick={createlottery}
             >
               <div className="md:w-1/3 mx-4">
-                {/* Left side of the box with the image */}
                 <img
                   src={luffy1}
                   alt="Clickable"
                   className="w-52 h-auto rounded-lg"
                 />
               </div>
-              <div className="md:w-2/3 bg-gradient-to-br from-blue-200 to-blue-500 rounded-lg p-2">
+              <div className="md:w-2/3 mt-2 bg-gradient-to-br from-blue-200 to-blue-500 rounded-lg p-2">
                 {/* Right side of the box with a different background */}
                 <h2 className="text-2xl text-white font-semibold mb-4 text-center">
                   CREATE LOTTERY DRAW
@@ -213,7 +255,7 @@ export const Home = () => {
                   className="w-52 h-auto rounded-lg"
                 />
               </div>
-              <div className="md:w-2/3 bg-gradient-to-br from-blue-200 to-blue-500 rounded-lg p-2">
+              <div className="md:w-2/3 mt-2 bg-gradient-to-br from-blue-200 to-blue-500 rounded-lg p-2">
                 {/* Right side of the box with a different background */}
                 <h2 className="text-2xl  text-white font-semibold mb-4 text-center">
                   GET LOTTERY TICKETS
@@ -235,20 +277,97 @@ export const Home = () => {
                   className="w-52 h-auto rounded-lg"
                 />
               </div>
-              <div className="md:w-2/3 bg-gradient-to-br from-blue-200 to-blue-500 rounded-lg p-2">
+              <div className="md:w-2/3 mt-2 bg-gradient-to-br from-blue-200 to-blue-500 rounded-lg p-2">
                 {/* Right side of the box with a different background */}
                 <h2 className="text-2xl  text-white font-semibold mb-4 text-center">
                   GET WINNER
                 </h2>
-                <p className="text-center">
-                  Only Contract Owner can Call Create A new Lottery draw
-                </p>
+                <p className="text-center">Only Contract Owner can Call</p>
               </div>
             </section>
+            <section
+              className="flex flex-col md:flex-row m-5 items-center mx-4 px-1 md:mx-16 rounded-lg  md:p-8 mb-8 shadow-2xl shadow-cyan-800 cursor-pointer"
+              onClick={() => setchangeticketprice(true)}
+            >
+              <div className="md:w-1/3 mx-4">
+                {/* Left side of the box with the image */}
+                <img
+                  src={luffy7}
+                  alt="Clickable"
+                  className="w-52 h-auto rounded-lg"
+                />
+              </div>
+              <div className="md:w-2/3 mt-2 bg-gradient-to-br from-blue-200 to-blue-500 rounded-lg p-2">
+                {/* Right side of the box with a different background */}
+                <h2 className="text-2xl  text-white font-semibold mb-4 text-center">
+                  Change Ticket Price
+                </h2>
+                <p className="text-center">Only Contract Owner can Call</p>
+              </div>
+            </section>
+            <section
+              className="flex flex-col md:flex-row m-5 items-center mx-4 px-1 md:mx-16 rounded-lg  md:p-8 mb-8 shadow-2xl shadow-cyan-800 cursor-pointer"
+              onClick={() => setchangeLotterytimelimit(true)}
+            >
+              <div className="md:w-1/3 mx-4">
+                {/* Left side of the box with the image */}
+                <img
+                  src={luffy8}
+                  alt="Clickable"
+                  className="w-52 h-auto rounded-lg"
+                />
+              </div>
+              <div className="md:w-2/3 mt-2 bg-gradient-to-br from-blue-200 to-blue-500 rounded-lg p-2">
+                {/* Right side of the box with a different background */}
+                <h2 className="text-2xl  text-white font-semibold mb-4 text-center">
+                  Change Lottery Time Limit
+                </h2>
+                <p className="text-center">Only Contract Owner can Call</p>
+              </div>
+            </section>
+            <section
+              className="flex flex-col md:flex-row m-5 items-center mx-4 px-1 md:mx-16 rounded-lg  md:p-8 mb-8 shadow-2xl shadow-cyan-800 cursor-pointer"
+              onClick={() => setchangemaxamount(true)}
+            >
+              <div className="md:w-1/3 mx-4">
+                {/* Left side of the box with the image */}
+                <img
+                  src={luffy9}
+                  alt="Clickable"
+                  className="w-52 h-auto rounded-lg"
+                />
+              </div>
+              <div className="md:w-2/3 mt-2 bg-gradient-to-br from-blue-200 to-blue-500 rounded-lg p-2">
+                {/* Right side of the box with a different background */}
+                <h2 className="text-2xl  text-white font-semibold mb-4 text-center">
+                  Change max amount of Ticket User can hold
+                </h2>
+                <p className="text-center">Only Contract Owner can Call</p>
+              </div>
+            </section>
+
             {isFormOpen && (
               <FormPopup
                 onClose={() => setIsFormOpen(false)}
                 onClick={handleSubmitForm}
+              />
+            )}
+            {changeticketprice && (
+              <ChangeTicketPrice
+                onClose={() => setchangeticketprice(false)}
+                onClick={handlechangeticketprice}
+              />
+            )}
+            {changeLotterytimelimit && (
+              <ChangeLotteryTimeLimit
+                onClose={() => setchangeLotterytimelimit(false)}
+                onClick={handlechangelotterytimelimit}
+              />
+            )}
+            {changemaxamount && (
+              <ChangeMax
+                onClose={() => setchangemaxamount(false)}
+                onClick={handlemaxamount}
               />
             )}
           </div>
@@ -270,12 +389,13 @@ export const Home = () => {
                 <span className="text-red-950"> {truncateCaddress}</span>{" "}
               </p>
               <p className="font-bold text-black text-2xl bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 bg-clip-text  rounded-lg optimicy-40 mb-4 backdrop-filter backdrop-blur-lg">
-                Lottery Ticket no:{" "}
+                Winning Ticket no:{" "}
                 <span className="text-cyan-900"> {winnerticket}</span>
               </p>
               <p className="font-bold text-black text-2xl bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 bg-clip-text  rounded-lg optimicy-40 mb-4 backdrop-filter backdrop-blur-lg">
                 Total Prize:{" "}
-                <span className="text-cyan-900"> {prizeamount}</span>
+                <span className="text-cyan-900"> {prizeamount}</span>{" "}
+                <span className="text-blue-900">ETH</span>
               </p>
               <p className="font-bold text-black text-2xl bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 bg-clip-text  rounded-lg optimicy-40 mb-4 backdrop-filter backdrop-blur-lg">
                 Lottery Price:{" "}
@@ -294,8 +414,24 @@ export const Home = () => {
                 Ending Block:{" "}
                 <span className="text-red-950"> {lotteryendtime}</span>{" "}
               </p>
-              <p className="font-bold text-white text-2xl bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 bg-clip-text  rounded-lg optimicy-40 mb-4 backdrop-filter backdrop-blur-lg">
+              <p className="font-bold text-black text-2xl bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 bg-clip-text  rounded-lg optimicy-40 mb-4 backdrop-filter backdrop-blur-lg">
                 Owner: <span className="text-cyan-600"> {truncateowner}</span>{" "}
+              </p>
+              <p className="font-bold text-black text-2xl bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 bg-clip-text  rounded-lg optimicy-40 mb-4 backdrop-filter backdrop-blur-lg">
+                Amount Of My Tickets:{" "}
+                <span className="text-cyan-600"> {ticketamount}</span>{" "}
+              </p>
+              <p className="font-bold text-black text-2xl bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 bg-clip-text  rounded-lg optimicy-40 mb-4 backdrop-filter backdrop-blur-lg">
+                Block limit:{" "}
+                <span className="text-cyan-600"> {lotterytime}</span>{" "}
+              </p>
+              <p className="font-bold text-black text-2xl bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 bg-clip-text  rounded-lg optimicy-40 mb-4 backdrop-filter backdrop-blur-lg">
+                # Tickets user can hold :{" "}
+                <span className="text-cyan-600"> {maxamount}</span>{" "}
+              </p>
+              <p className="font-bold text-black text-2xl bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 bg-clip-text  rounded-lg optimicy-40 mb-4 backdrop-filter backdrop-blur-lg">
+                # Holding Tickets :{" "}
+                <span className="text-black">{holdingticket}</span>{" "}
               </p>
             </div>
           </div>

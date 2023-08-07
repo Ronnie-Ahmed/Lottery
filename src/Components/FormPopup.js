@@ -20,7 +20,7 @@ export const FormPopup = ({ onClose, onSubmit }) => {
           lotteryabi,
           signer
         );
-        const data = await contract.ticketprice();
+        const data = await contract.getticketprice();
         const totalprice = ethers.utils.formatEther(data) * lotteryamount;
         setPrice(totalprice);
         const start = await contract.getstarttime();
@@ -51,32 +51,44 @@ export const FormPopup = ({ onClose, onSubmit }) => {
           lotteryabi,
           signer
         );
-        // if (currenttime > lotterystartime && currenttime < lotteryendtime) {
-        const tickerPrice = await contract.ticketprice();
-        const updatedPrice =
-          ethers.utils.formatEther(tickerPrice.toString()) * lotteryamount;
+        if (currenttime > lotterystartime && currenttime < lotteryendtime) {
+          const limit = await contract.getmaxamountofticket();
 
-        const data = await contract.getTicketToken(lotteryamount, {
-          value: ethers.utils.parseEther(updatedPrice.toString()),
-        });
-        await data.wait(1);
-        const getticket = await contract.getTicket(lotteryamount);
-        await getticket.wait(1);
-        alert("You got the tickets");
-        // } else {
-        //   alert("Lottery is not active");
-        // }
+          const tickerPrice = await contract.getticketprice();
+          const updatedPrice =
+            ethers.utils.formatEther(tickerPrice.toString()) * lotteryamount;
+
+          const data = await contract.getTickets(lotteryamount, {
+            value: ethers.utils.parseEther(updatedPrice.toString()),
+          });
+          await data.wait(1);
+          alert(`You bought ${limit} tickets`);
+        } else {
+          alert("Lottery is not active");
+        }
       } else {
         throw new Error("Please Connect Wallet");
       }
     } catch (err) {
       console.log(err);
+      console.log(err);
+      if (err.code === "ACTION_REJECTED") {
+        alert("Transaction Rejected");
+      } else if (err.reason === "execution reverted") {
+        alert("Execution Reverted");
+      } else if (
+        err.message ===
+        "MetaMask Tx Signature: User denied transaction signature."
+      ) {
+        alert("Transaction Rejected");
+      }
     }
   };
 
   useEffect(() => {
     fetchdata();
     // Update the price lotteryamount whenever the amount of tickets (lotteryamount) changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lotteryamount]);
 
   return (
