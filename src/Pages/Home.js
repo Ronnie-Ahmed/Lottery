@@ -429,9 +429,9 @@ export const Home = () => {
                 # Tickets user can hold :{" "}
                 <span className="text-cyan-600"> {maxamount}</span>{" "}
               </p>
-              <p className="font-bold text-black text-2xl bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 bg-clip-text  rounded-lg optimicy-40 mb-4 backdrop-filter backdrop-blur-lg">
-                # Holding Tickets :{" "}
-                <span className="text-black">{holdingticket}</span>{" "}
+              <p className="font-bold text-black text-xl md:text-2xl lg:text-3xl xl:text-4xl bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 bg-clip-text rounded-lg mb-4 backdrop-filter backdrop-blur-lg p-4 md:p-6 lg:p-8 xl:p-10 break-all">
+                # Holding Tickets:{" "}
+                <span className="text-cyan-600">{holdingticket}</span>
               </p>
             </div>
           </div>
