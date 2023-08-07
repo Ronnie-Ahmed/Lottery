@@ -1,28 +1,30 @@
-<!-- # Live : [@Live Project Link](https://dao-ronnie-ahmed.vercel.app/)
+<!-- # Live : [@Live Project Link](https://lottery-eight-woad.vercel.app/)
 
 # Lottery Dapp
 
-🐧 🐧 Lottery 🐧🐧
+🐧 🐧 Lottery Dapp 🐧🐧
 
-🗳️ Introducing my Decentralized Autonomous Organization (DAO) powered by OpenZeppelin Governance and ERC20 Tokens! 🌐
+The Decentralized Lottery Dapp is an innovative project that leverages blockchain technology to bring the excitement of lotteries to the Ethereum network.
 
-I've used techs like The Graph, Hardhat, Solidity, ReactJS, Ethers.js , thirdweb development
 
-Propose game-changing ideas and watch them transform into reality. Prepare for voting as proposals gain momentum, and then cast your vote with just a few clicks. Vote for, against, or abstain—your decision counts! 💪
 
-🌟 How It Works:
-Propose: Share your game-changing ideas for the DAO.
-Prepare: Voters get time to research and get ready for voting.
-Vote: Cast your choice for, against, or abstain.
-Incentives: Get rewarded with free tokens for voting!
-Execute: Winning proposals become reality.
-Transparency: Witness the results unfold!
+🎟️ How it Works:
+
+✔️ As the owner of the smart contract, I have implemented exclusive rights to initiate new lottery sessions.
+
+✔️ Users can buy lottery tickets using Ether, but I have thoughtfully incorporated a limit to ensure fair participation and prevent any monopolization.
+
+✔️ Each lottery session is time-limited, adding an extra layer of excitement and encouraging prompt participation from users.
+
+✔️ When the session time expires, I have implemented a function that declares the lucky winner based on their lottery ticket number.
+
+✔️ The total Ether collected throughout the session is then transferred directly to the winner's account, utilizing the power of decentralized finance (DeFi) to facilitate secure and transparent prize distribution.
 
 ## Author
 
 - [@Ronnie Ahmed_Github](https://www.github.com/Ronnie-Ahmed)
 - [@Ronnie Ahmed_Portfolio](https://portfolio-fl2l.vercel.app/)
-- [@Ronnie Ahmed Linkdin](https://www.linkedin.com/in/ronnie-ahmed-3bb290271/)
+- [@Ronnie Ahmed_Linkdin](https://www.linkedin.com/in/ronnie-ahmed-3bb290271/)
 
 ## Tech Stack
 
@@ -30,20 +32,22 @@ Transparency: Witness the results unfold!
 
 ## Installation
 
-**Frontend:** [@Frontend](https://github.com/Ronnie-Ahmed/DAO)
-**Backend:** [@Backend](https://github.com/Ronnie-Ahmed/DAO-Backend)
-**Graph:** [@Backend](https://github.com/Ronnie-Ahmed/DAO-graph)
+**Frontend:** [@Frontend](https://github.com/Ronnie-Ahmed/Lottery)
+**Backend:** [@Backend](https://github.com/Ronnie-Ahmed/Lottery-Backend)
+
 
 ```
 
 ##Project Video
-https://github.com/Ronnie-Ahmed/DAO/assets/68500792/673c182d-28d6-490d-be13-d632d4dc07ac
+
+
+https://github.com/Ronnie-Ahmed/Lottery/assets/68500792/90d74c05-82db-4c08-a750-dcc81e860ef3
+
+
 
 ##Screen Shoots
-![result](https://github.com/Ronnie-Ahmed/DAO/assets/68500792/c06f7e81-d22e-441b-94c0-cfdd492c116e)
-![CastVote](https://github.com/Ronnie-Ahmed/DAO/assets/68500792/a3efd476-e71d-4e50-a86e-4c2d9e4e864f)
-![Homepage](https://github.com/Ronnie-Ahmed/DAO/assets/68500792/a8389216-0bea-4f94-bad5-904d9e3d4d00)
-![Proposal](https://github.com/Ronnie-Ahmed/DAO/assets/68500792/f1e58b90-06d2-479e-bddd-3950ae9315b2)
+![LotteryHome](https://github.com/Ronnie-Ahmed/Lottery/assets/68500792/f6fe0180-3f38-4bab-ae13-2bbe4fbd1729)
+
 
 
 
