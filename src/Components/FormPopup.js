@@ -52,7 +52,7 @@ export const FormPopup = ({ onClose, onSubmit }) => {
           signer
         );
         if (currenttime > lotterystartime && currenttime < lotteryendtime) {
-          const limit = await contract.getmaxamountofticket();
+          // const limit = await contract.getmaxamountofticket();
 
           const tickerPrice = await contract.getticketprice();
           const updatedPrice =
@@ -62,7 +62,7 @@ export const FormPopup = ({ onClose, onSubmit }) => {
             value: ethers.utils.parseEther(updatedPrice.toString()),
           });
           await data.wait(1);
-          alert(`You bought ${limit} tickets`);
+          alert(`You bought ${lotteryamount} tickets`);
         } else {
           alert("Lottery is not active");
         }
