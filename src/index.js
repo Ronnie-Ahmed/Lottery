@@ -5,10 +5,8 @@ import App from "./App";
 import {
   ThirdwebProvider,
   metamaskWallet,
-  coinbaseWallet,
-  walletConnect,
-  localWallet,
-  frameWallet,
+   coinbaseWallet,
+ 
 } from "@thirdweb-dev/react";
 import { BrowserRouter } from "react-router-dom";
 
@@ -21,9 +19,7 @@ root.render(
       supportedWallets={[
         metamaskWallet(),
         coinbaseWallet(),
-        walletConnect(),
-        localWallet(),
-        frameWallet(),
+       
       ]}
     >
       <BrowserRouter>
